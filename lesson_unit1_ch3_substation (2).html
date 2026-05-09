@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technical English · Electrical Substation · Session 1</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.15);
+    --text: #f0f2f8;
+    --muted: #8b92b0;
+    --accent: #4f8ef7;
+    --accent2: #2fd6a0;
+    --amber: #f0a830;
+    --coral: #f07060;
+    --purple: #9b7ff4;
+    --font: 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(15,17,23,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0; padding: 0 2rem; height: 56px;
+  }
+  .nav-logo { font-size: 13px; font-weight: 600; color: var(--accent); margin-right: 2rem; letter-spacing: 0.04em; white-space: nowrap; }
+  .nav-tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    background: none; border: none; color: var(--muted); font-size: 13px; font-family: var(--font);
+    padding: 6px 14px; border-radius: 6px; cursor: pointer; white-space: nowrap; transition: all 0.15s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active { background: var(--surface2); color: var(--text); font-weight: 600; }
+  .tab-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .d-blue { background: var(--accent); }
+  .d-teal { background: var(--accent2); }
+  .d-amber { background: var(--amber); }
+  .d-coral { background: var(--coral); }
+  .d-purple { background: var(--purple); }
+
+  /* PAGES */
+  .page { display: none; padding: 80px 2rem 4rem; max-width: 900px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* HERO */
+  .hero { margin-bottom: 2.5rem; }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+  .hero-title { font-size: 32px; font-weight: 700; line-height: 1.2; margin-bottom: 8px; }
+  .hero-sub { font-size: 15px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; }
+  .badge { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; }
+  .b-blue { background: rgba(79,142,247,0.15); color: #7eb5ff; border: 1px solid rgba(79,142,247,0.25); }
+  .b-teal { background: rgba(47,214,160,0.12); color: #5ee8b8; border: 1px solid rgba(47,214,160,0.2); }
+  .b-amber { background: rgba(240,168,48,0.12); color: #f8c860; border: 1px solid rgba(240,168,48,0.2); }
+  .b-coral { background: rgba(240,112,96,0.12); color: #f89080; border: 1px solid rgba(240,112,96,0.2); }
+
+  /* CARDS */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 12px; }
+  .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .card-icon { font-size: 18px; }
+  .card-title { font-size: 15px; font-weight: 600; }
+  .card-body { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .card-body strong { color: var(--text); font-weight: 600; }
+
+  /* SECTION HEADERS */
+  .sec-header { display: flex; align-items: center; gap: 12px; margin: 2rem 0 1rem; }
+  .sec-num { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .sn-blue { background: rgba(79,142,247,0.2); color: #7eb5ff; }
+  .sn-teal { background: rgba(47,214,160,0.2); color: #5ee8b8; }
+  .sn-amber { background: rgba(240,168,48,0.2); color: #f8c860; }
+  .sn-coral { background: rgba(240,112,96,0.2); color: #f89080; }
+  .sec-title { font-size: 18px; font-weight: 700; }
+  .time-tag { margin-left: auto; font-size: 12px; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px; }
+
+  /* VOCAB FLASHCARDS */
+  .flashcard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin: 1rem 0; }
+  .flashcard { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; cursor: pointer; transition: all 0.2s; position: relative; min-height: 110px; display: flex; flex-direction: column; justify-content: space-between; }
+  .flashcard:hover { border-color: var(--border2); background: var(--surface2); }
+  .flashcard.flipped .fc-front { display: none; }
+  .flashcard.flipped .fc-back { display: flex; }
+  .fc-front { display: flex; flex-direction: column; height: 100%; }
+  .fc-back { display: none; flex-direction: column; height: 100%; }
+  .fc-en { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .fc-es { font-size: 13px; color: var(--muted); }
+  .fc-ex { font-size: 12px; color: var(--accent2); margin-top: 8px; font-style: italic; line-height: 1.4; }
+  .fc-hint { font-size: 11px; color: var(--border2); margin-top: auto; text-align: right; }
+  .fc-back .fc-es { font-size: 16px; font-weight: 700; color: var(--amber); margin-bottom: 6px; }
+  .fc-back .fc-def { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .vocab-controls { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .vbtn { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-size: 13px; padding: 6px 16px; border-radius: 20px; cursor: pointer; transition: all 0.15s; font-family: var(--font); }
+  .vbtn:hover { border-color: var(--border2); color: var(--text); }
+  .vbtn.on { background: rgba(79,142,247,0.15); border-color: rgba(79,142,247,0.4); color: #7eb5ff; }
+
+  /* GRAMMAR EXAMPLES */
+  .grammar-block { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 12px; }
+  .gram-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .gram-structure { font-size: 14px; background: var(--surface2); border-radius: 8px; padding: 10px 14px; color: var(--accent2); font-family: monospace; margin-bottom: 12px; }
+  .example-row { display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start; }
+  .ex-en { font-size: 14px; color: var(--text); flex: 1; line-height: 1.5; }
+  .ex-es { font-size: 13px; color: var(--muted); flex: 1; line-height: 1.5; }
+  .toggle-es-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-size: 12px; padding: 4px 12px; border-radius: 20px; cursor: pointer; margin-bottom: 10px; font-family: var(--font); transition: all 0.15s; }
+  .toggle-es-btn:hover { color: var(--text); border-color: var(--border2); }
+  .es-col { transition: opacity 0.2s; }
+  .es-col.hidden { opacity: 0; pointer-events: none; }
+
+  /* ACTIVITY CARDS */
+  .activity { border-left: 3px solid var(--accent); padding: 12px 16px; margin-bottom: 12px; background: var(--surface); border-radius: 0 10px 10px 0; }
+  .activity.teal { border-color: var(--accent2); }
+  .activity.amber { border-color: var(--amber); }
+  .activity.coral { border-color: var(--coral); }
+  .act-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .act-body { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .act-tip { margin-top: 8px; font-size: 12px; color: var(--accent2); background: rgba(47,214,160,0.08); border-radius: 6px; padding: 6px 10px; }
+
+  /* SPEAKING PROMPTS */
+  .speak-prompt { background: var(--surface2); border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; border: 1px solid var(--border); }
+  .sp-label { font-size: 11px; font-weight: 700; color: var(--coral); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+  .sp-text { font-size: 15px; color: var(--text); line-height: 1.5; }
+  .sp-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* HOMEWORK */
+  .hw-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .hw-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(155,127,244,0.2); color: #b89ff8; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .hw-content {}
+  .hw-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .hw-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* PROGRESS BAR */
+  .progress-bar { display: flex; gap: 4px; margin-bottom: 2rem; }
+  .pb-seg { height: 4px; flex: 1; border-radius: 2px; background: var(--surface2); }
+  .pb-seg.done { background: var(--accent); }
+  .pb-seg.current { background: var(--accent2); }
+
+  /* NEXT PREV */
+  .nav-footer { display: flex; justify-content: space-between; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .nav-btn { background: var(--surface); border: 1px solid var(--border2); color: var(--text); font-size: 14px; font-weight: 600; padding: 10px 22px; border-radius: 8px; cursor: pointer; font-family: var(--font); transition: all 0.15s; }
+  .nav-btn:hover { background: var(--surface2); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .nav-btn.primary { background: var(--accent); border-color: var(--accent); color: white; }
+  .nav-btn.primary:hover { background: #6ba3ff; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">⚡ Technical English</div>
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showPage('warmup', this)"><span class="tab-dot d-blue"></span>Warm-up</button>
+    <button class="tab-btn" onclick="showPage('vocab', this)"><span class="tab-dot d-teal"></span>Vocabulary</button>
+    <button class="tab-btn" onclick="showPage('grammar', this)"><span class="tab-dot d-amber"></span>Grammar</button>
+    <button class="tab-btn" onclick="showPage('speaking', this)"><span class="tab-dot d-coral"></span>Speaking</button>
+    <button class="tab-btn" onclick="showPage('homework', this)"><span class="tab-dot d-purple"></span>Homework</button>
+  </div>
+</nav>
+
+<!-- PAGE: WARM-UP -->
+<div class="page active" id="page-warmup">
+  <div class="hero">
+    <div class="hero-eyebrow">Unit 1 · Chapter 3 · Session 1 of 3</div>
+    <div class="hero-title">Electrical Substation</div>
+    <div class="hero-sub">Technical English for Industrial Electrical Coordination — Level A2–B1</div>
+    <div class="badges">
+      <span class="badge b-blue">3 hours</span>
+      <span class="badge b-teal">20 vocabulary words</span>
+      <span class="badge b-amber">Present Continuous</span>
+      <span class="badge b-coral">Passive Voice (intro)</span>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="pb-seg current"></div>
+    <div class="pb-seg"></div>
+    <div class="pb-seg"></div>
+    <div class="pb-seg"></div>
+    <div class="pb-seg"></div>
+  </div>
+
+  <div class="sec-header">
+    <div class="sec-num sn-blue">1</div>
+    <div class="sec-title">Warm-up & Schema Activation</div>
+    <div class="time-tag">⏱ 20 min</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-icon">🎯</span><span class="card-title">Objective</span></div>
+    <div class="card-body">Activate what the student already knows before introducing formal vocabulary. The goal is <strong>no wrong answers</strong> — this is exploration, not evaluation.</div>
+  </div>
+
+  <div class="activity">
+    <div class="act-title">📷 Activity 1A — Picture Talk (8 min)</div>
+    <div class="act-body">Show the PEMEX substation photo on screen. Ask the student to describe what he sees using simple English:<br><br>
+    <em>"I see... / There is... / There are... / I think this is..."</em><br><br>
+    Teacher writes unknown words on the Zoom whiteboard as they come up. Don't correct grammar yet — only add vocabulary.</div>
+    <div class="act-tip">💡 Zoom tip: open whiteboard side by side with this screen. Write the words the student attempts in English.</div>
+  </div>
+
+  <div class="activity teal">
+    <div class="act-title">🗣️ Activity 1B — Prediction question (7 min)</div>
+    <div class="act-body">Ask aloud: <em>"What is the role of a substation? What happens to the electricity here?"</em><br><br>
+    Student answers in English — teacher rephrases the answer correctly and writes the improved sentence on the whiteboard. Student repeats the corrected version.</div>
+  </div>
+
+  <div class="activity amber">
+    <div class="act-title">📌 Session anchor — keep this on screen all class (5 min)</div>
+    <div class="act-body">Tell the student: <em>"By the end of today, if your US supervisor calls and asks: <strong>'What is happening on site today?'</strong> — you will be able to answer in English."</em><br><br>Write this question on the Zoom whiteboard and leave it there the whole session.</div>
+  </div>
+
+  <div class="nav-footer">
+    <button class="nav-btn" disabled>← Previous</button>
+    <button class="nav-btn primary" onclick="showPage('vocab', document.querySelectorAll('.tab-btn')[1])">Vocabulary →</button>
+  </div>
+</div>
+
+<!-- PAGE: VOCABULARY -->
+<div class="page" id="page-vocab">
+  <div class="sec-header">
+    <div class="sec-num sn-teal">2</div>
+    <div class="sec-title">Technical Vocabulary</div>
+    <div class="time-tag">⏱ 45 min</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-icon">📘</span><span class="card-title">How to use these cards</span></div>
+    <div class="card-body"><strong>Click any card</strong> to reveal the Spanish and definition. Use the buttons below to control display. Drill with the student: teacher says Spanish → student says English aloud, then uses it in a sentence.</div>
+  </div>
+
+  <div class="vocab-controls">
+    <button class="vbtn" onclick="flipAll(true)">Show all translations</button>
+    <button class="vbtn" onclick="flipAll(false)">Hide all translations</button>
+    <button class="vbtn" id="drill-btn" onclick="startDrill()">🎲 Random drill mode</button>
+  </div>
+
+  <div class="flashcard-grid" id="fc-grid">
+  </div>
+
+  <hr>
+  <div class="sec-header" style="margin-top: 1rem;">
+    <div class="sec-title" style="font-size:15px;">Activity 2A — Labeling (15 min)</div>
+  </div>
+  <div class="activity teal">
+    <div class="act-title">📷 Label the PEMEX photo</div>
+    <div class="act-body">Project the PEMEX substation photo. Student labels 8–10 elements using words from the vocabulary list. Then reads each label aloud — teacher corrects pronunciation on the Zoom whiteboard.<br><br>
+    Target words: <em>transformer, conduit, cable tray, switchboard, support structure, circuit breaker, grounding, panel board</em></div>
+    <div class="act-tip">💡 Zoom tip: use the annotation tool on the photo to draw arrows as the student identifies each element.</div>
+  </div>
+
+  <div class="activity amber">
+    <div class="act-title">🔁 Activity 2B — Vocabulary Rapid Drill (10 min)</div>
+    <div class="act-body">Fast-paced, spoken only — no paper needed.<br>
+    Round 1: Teacher says Spanish → student says English + spells it aloud.<br>
+    Round 2: Teacher says English → student gives Spanish + uses it in a sentence.<br><br>
+    <strong>Priority words (must be solid before Session 2):</strong><br>
+    substation · transformer · conduit · cable tray · pending · release · circuit breaker</div>
+  </div>
+
+  <div class="nav-footer">
+    <button class="nav-btn" onclick="showPage('warmup', document.querySelectorAll('.tab-btn')[0])">← Warm-up</button>
+    <button class="nav-btn primary" onclick="showPage('grammar', document.querySelectorAll('.tab-btn')[2])">Grammar →</button>
+  </div>
+</div>
+
+<!-- PAGE: GRAMMAR -->
+<div class="page" id="page-grammar">
+  <div class="sec-header">
+    <div class="sec-num sn-amber">3</div>
+    <div class="sec-title">Functional Grammar</div>
+    <div class="time-tag">⏱ 55 min</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-icon">⚙️</span><span class="card-title">Teaching approach</span></div>
+    <div class="card-body">Grammar is <strong>never taught in isolation</strong>. Every structure is introduced as a real communication need: <em>"This is what you say when your US supervisor calls at 9am."</em></div>
+  </div>
+
+  <!-- PRESENT CONTINUOUS -->
+  <div class="grammar-block">
+    <div class="gram-label">Grammar 1 — Present Continuous</div>
+    <div class="gram-structure">Subject + am / is / are + verb-ing + object / location</div>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+      <div style="font-size:13px; color:var(--muted);">Real site sentences — student drills these aloud</div>
+      <button class="toggle-es-btn" onclick="toggleEs('pc-es')">Toggle Spanish</button>
+    </div>
+    <div id="pc-examples">
+      <div class="example-row">
+        <div class="ex-en">We <strong>are installing</strong> the conduit on the second level.</div>
+        <div class="ex-es es-col" id="pc-es">Estamos instalando la canaleta en el segundo nivel.</div>
+      </div>
+      <div class="example-row">
+        <div class="ex-en">The crew <strong>is working</strong> on the cable trays right now.</div>
+        <div class="ex-es es-col" id="pc-es">El equipo está trabajando en las charolas ahora mismo.</div>
+      </div>
+      <div class="example-row">
+        <div class="ex-en">The transformer <strong>is being positioned</strong> near the panel.</div>
+        <div class="ex-es es-col" id="pc-es">El transformador se está posicionando cerca del tablero.</div>
+      </div>
+      <div class="example-row">
+        <div class="ex-en">The area <strong>is not ready</strong> yet. We <strong>are still waiting</strong> for the release.</div>
+        <div class="ex-es es-col" id="pc-es">El área no está lista todavía. Seguimos esperando la liberación.</div>
+      </div>
+      <div class="example-row">
+        <div class="ex-en">We <strong>are not working</strong> on the grounding today — it <strong>is pending</strong>.</div>
+        <div class="ex-es es-col" id="pc-es">No estamos trabajando en la puesta a tierra hoy — está pendiente.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSIVE VOICE -->
+  <div class="grammar-block">
+    <div class="gram-label">Grammar 2 — Passive Voice (Introduction)</div>
+    <div class="gram-structure">Subject + was / were / has been + past participle</div>
+    <div style="font-size:13px; color:var(--muted); margin-bottom:10px;">The engineering way to speak — focus on the result, not who did it. Very common in technical reports.</div>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+      <div style="font-size:13px; color:var(--muted);">Real site sentences</div>
+      <button class="toggle-es-btn" onclick="toggleEs('pv-es')">Toggle Spanish</button>
+    </div>
+    <div id="pv-examples">
+      <div class="example-row">
+        <div class="ex-en">The transformer <strong>was installed</strong> yesterday.</div>
+        <div class="ex-es es-col" id="pv-es">El transformador fue instalado ayer.</div>
+      </div>
+      <div class="example-row">
+        <div class="ex-en">The supports <strong>were fabricated</strong> off-site.</div>
+        <div class="ex-es es-col" id="pv-es">Los soportes fueron fabricados fuera del sitio.</div>
+      </div>
+      <div class="example-row">
+        <div class="ex-en">The area <strong>has not been released</strong> yet.</div>
+        <div class="ex-es es-col" id="pv-es">El área todavía no ha sido liberada.</div>
+      </div>
+      <div class="example-row">
+        <div class="ex-en">The circuit breaker <strong>was replaced</strong> last week.</div>
+        <div class="ex-es es-col" id="pv-es">El interruptor fue reemplazado la semana pasada.</div>
+      </div>
+      <div class="example-row">
+        <div class="ex-en">The cable tray <strong>was installed</strong> on Monday. The conduit <strong>has been connected</strong>.</div>
+        <div class="ex-es es-col" id="pv-es">La charola fue instalada el lunes. La canaleta ha sido conectada.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="activity amber">
+    <div class="act-title">🔁 Activity 3A — Transform the sentence (10 min)</div>
+    <div class="act-body">Teacher reads an active sentence → student converts to passive aloud. No writing needed — only speaking.<br><br>
+    <em>"The crew installed the conduit."</em> → <em>"The conduit was installed."</em><br>
+    <em>"They replaced the fuse."</em> → <em>"The fuse was replaced."</em><br>
+    <em>"The team has not released the area."</em> → <em>"The area has not been released."</em><br><br>
+    Do 8–10 sentences. Focus on fluency — correct after the attempt, not during.</div>
+  </div>
+
+  <div class="nav-footer">
+    <button class="nav-btn" onclick="showPage('vocab', document.querySelectorAll('.tab-btn')[1])">← Vocabulary</button>
+    <button class="nav-btn primary" onclick="showPage('speaking', document.querySelectorAll('.tab-btn')[3])">Speaking →</button>
+  </div>
+</div>
+
+<!-- PAGE: SPEAKING -->
+<div class="page" id="page-speaking">
+  <div class="sec-header">
+    <div class="sec-num sn-coral">4</div>
+    <div class="sec-title">Real Communication & Speaking</div>
+    <div class="time-tag">⏱ 50 min</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-icon">📞</span><span class="card-title">Role play setup</span></div>
+    <div class="card-body">Teacher plays the <strong>US supervisor on the phone</strong>. Student plays the <strong>Mexican site coordinator</strong>. Use the PEMEX photo as reference. Do the role play 3 times — first reading, then with notes, then without notes.</div>
+  </div>
+
+  <div class="speak-prompt">
+    <div class="sp-label">Supervisor says</div>
+    <div class="sp-text">"Good morning! I'm calling to check on the substation project. What's happening on site today? Can you give me an update?"</div>
+  </div>
+
+  <div class="speak-prompt">
+    <div class="sp-label">Student must include (3–4 sentences)</div>
+    <div class="sp-text">1. What is currently in progress (Present Continuous)<br>2. What has already been completed (Passive Voice)<br>3. What is still pending</div>
+  </div>
+
+  <div class="card" style="margin-top: 1rem;">
+    <div class="card-header"><span class="card-icon">✏️</span><span class="card-title">Sample answer (teacher reference)</span></div>
+    <div class="card-body">
+      "Good morning. We <strong>are currently installing</strong> the conduit on the second level. The transformer <strong>has already been positioned</strong> near the switchboard. The cable tray <strong>is still pending</strong> — the area <strong>has not been released</strong> yet. We expect to finish by Thursday."
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="activity coral">
+    <div class="act-title">📋 Activity 4B — PEMEX Activities Report (20 min)</div>
+    <div class="act-body">Give student a list of "Actividades por ejecutar" from the PEMEX document. For each item, student must:<br><br>
+    1. Translate to English<br>
+    2. Say it as a Present Continuous sentence (in progress)<br>
+    3. Say it as a Passive Voice sentence (if completed)<br><br>
+    <em>Example: "Instalación de charola de cable"<br>
+    → "We are installing the cable tray."<br>
+    → "The cable tray has been installed."</em>
+    </div>
+    <div class="act-tip">💡 This activity directly uses the student's own work documents. High motivation, maximum relevance.</div>
+  </div>
+
+  <div class="activity">
+    <div class="act-title">🎤 Activity 4C — Final spoken site report (10 min)</div>
+    <div class="act-body">Student gives a <strong>1-minute site report in English</strong> with no prompts — only the PEMEX photo.<br><br>
+    Must include:<br>
+    • What is currently happening (Present Continuous)<br>
+    • What has already been completed (Passive Voice)<br>
+    • What is still pending<br><br>
+    Teacher listens without interrupting. After delivery: give feedback on vocabulary and grammar — 3 things done well, 2 things to improve.</div>
+  </div>
+
+  <div class="nav-footer">
+    <button class="nav-btn" onclick="showPage('grammar', document.querySelectorAll('.tab-btn')[2])">← Grammar</button>
+    <button class="nav-btn primary" onclick="showPage('homework', document.querySelectorAll('.tab-btn')[4])">Homework →</button>
+  </div>
+</div>
+
+<!-- PAGE: HOMEWORK -->
+<div class="page" id="page-homework">
+  <div class="sec-header">
+    <div class="sec-num" style="background:rgba(155,127,244,0.2); color:#b89ff8;">★</div>
+    <div class="sec-title">Homework & Session 2 Preview</div>
+    <div class="time-tag">⏱ 10 min</div>
+  </div>
+
+  <div class="hw-item">
+    <div class="hw-num">1</div>
+    <div class="hw-content">
+      <div class="hw-title">Vocabulary journal</div>
+      <div class="hw-desc">Write 5 new vocabulary words from today. For each: English word, Spanish translation, say the pronunciation aloud 3 times, and write one original sentence from your real work experience.</div>
+    </div>
+  </div>
+  <div class="hw-item">
+    <div class="hw-num">2</div>
+    <div class="hw-content">
+      <div class="hw-title">Take a photo</div>
+      <div class="hw-desc">Find one real photo of a substation or electrical installation from your work. In Session 2, you will describe it in English for 2 minutes without preparation.</div>
+    </div>
+  </div>
+  <div class="hw-item">
+    <div class="hw-num">3</div>
+    <div class="hw-content">
+      <div class="hw-title">Listen & repeat (5 min/day)</div>
+      <div class="hw-desc">Practice saying these sentences out loud every day this week — on your way to work, in the car, anywhere:<br><br>
+      <em>"We are installing the conduit on the second level."<br>
+      "The transformer has been installed."<br>
+      "The area has not been released yet."<br>
+      "The cable tray is still pending."</em></div>
+    </div>
+  </div>
+
+  <hr>
+  <div class="card" style="margin-top: 1rem; border-color: rgba(155,127,244,0.3);">
+    <div class="card-header"><span class="card-icon">🔭</span><span class="card-title">Session 2 preview</span></div>
+    <div class="card-body">
+      <strong>Types of substations</strong> (terminal, zone, distribution)<br>
+      <strong>There is / There are</strong> for describing installations<br>
+      <strong>Modals</strong>: must, should, can't — for safety communication<br>
+      <strong>Writing</strong>: short site update email in English<br>
+      <strong>Speaking</strong>: describe your own photo from homework
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 12px; border-color: rgba(240,112,96,0.25);">
+    <div class="card-header"><span class="card-icon">📌</span><span class="card-title">Teacher notes</span></div>
+    <div class="card-body">
+      <strong>Priority vocab for Session 2:</strong> substation · transformer · conduit · cable tray · pending · release · circuit breaker — these 7 must be solid.<br><br>
+      <strong>Error correction rule:</strong> during fluency activities, don't interrupt. Write errors down, correct after delivery.<br><br>
+      <strong>Motivation tip:</strong> every time student says something correctly that they couldn't say before — name it. <em>"That's exactly what you'd say on site."</em>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <button class="nav-btn" onclick="showPage('speaking', document.querySelectorAll('.tab-btn')[3])">← Speaking</button>
+    <button class="nav-btn primary" style="background: var(--accent2); border-color: var(--accent2);">✓ Session 1 complete</button>
+  </div>
+</div>
+
+<script>
+const vocabData = [
+  { en: "substation", es: "subestación", ex: "This is the main substation." },
+  { en: "transformer", es: "transformador", ex: "The transformer is installed." },
+  { en: "circuit breaker", es: "interruptor de circuito", ex: "Check the circuit breaker." },
+  { en: "conduit", es: "canaleta / ducto", ex: "We are running conduit here." },
+  { en: "cable tray", es: "charola de cables", ex: "The cable tray is pending." },
+  { en: "switchboard", es: "tablero eléctrico", ex: "The switchboard is ready." },
+  { en: "grounding", es: "puesta a tierra", ex: "Grounding must be checked." },
+  { en: "voltage", es: "voltaje / tensión", ex: "High voltage — danger zone." },
+  { en: "outage", es: "corte / apagón", ex: "There was an outage yesterday." },
+  { en: "distribution", es: "distribución", ex: "Distribution starts at this point." },
+  { en: "transmission line", es: "línea de transmisión", ex: "The transmission line is overhead." },
+  { en: "step-up transformer", es: "transformador elevador", ex: "A step-up transformer increases voltage." },
+  { en: "step-down transformer", es: "transformador reductor", ex: "Step-down transformers are used here." },
+  { en: "busbar", es: "barra colectora", ex: "The busbar connects the panels." },
+  { en: "support structure", es: "estructura de soporte", ex: "We are fabricating the support structure." },
+  { en: "panel board", es: "tablero de distribución", ex: "The panel board is being installed." },
+  { en: "pending", es: "pendiente", ex: "That work is still pending." },
+  { en: "release (an area)", es: "liberar (el área)", ex: "The area has not been released." },
+  { en: "overhead / underground", es: "aéreo / subterráneo", ex: "These lines are overhead." },
+  { en: "fuse", es: "fusible", ex: "Replace the fuse carefully." }
+];
+
+function buildCards() {
+  const grid = document.getElementById('fc-grid');
+  grid.innerHTML = '';
+  vocabData.forEach((w, i) => {
+    const card = document.createElement('div');
+    card.className = 'flashcard';
+    card.innerHTML = `
+      <div class="fc-front">
+        <div>
+          <div class="fc-en">${w.en}</div>
+          <div class="fc-ex">"${w.ex}"</div>
+        </div>
+        <div class="fc-hint">click to see Spanish</div>
+      </div>
+      <div class="fc-back">
+        <div>
+          <div class="fc-es">${w.es}</div>
+          <div class="fc-def">${w.en}</div>
+          <div class="fc-ex">"${w.ex}"</div>
+        </div>
+      </div>`;
+    card.onclick = () => card.classList.toggle('flipped');
+    grid.appendChild(card);
+  });
+}
+
+function flipAll(show) {
+  document.querySelectorAll('.flashcard').forEach(c => {
+    if (show) c.classList.add('flipped');
+    else c.classList.remove('flipped');
+  });
+}
+
+let drillActive = false;
+let drillIdx = 0;
+let drillOrder = [];
+function startDrill() {
+  if (!drillActive) {
+    drillActive = true;
+    drillOrder = [...Array(vocabData.length).keys()].sort(() => Math.random() - 0.5);
+    drillIdx = 0;
+    document.getElementById('drill-btn').textContent = '⏭ Next word';
+    document.getElementById('drill-btn').classList.add('on');
+    highlightCard(drillOrder[0]);
+  } else {
+    drillIdx = (drillIdx + 1) % drillOrder.length;
+    if (drillIdx === 0) {
+      drillActive = false;
+      document.getElementById('drill-btn').textContent = '🎲 Random drill mode';
+      document.getElementById('drill-btn').classList.remove('on');
+      document.querySelectorAll('.flashcard').forEach(c => c.style.opacity = '1');
+      return;
+    }
+    highlightCard(drillOrder[drillIdx]);
+  }
+}
+function highlightCard(idx) {
+  const cards = document.querySelectorAll('.flashcard');
+  cards.forEach((c, i) => {
+    c.style.opacity = i === idx ? '1' : '0.25';
+    if (i === idx) { c.classList.remove('flipped'); c.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+  });
+}
+
+function toggleEs(groupId) {
+  const els = document.querySelectorAll(`#${groupId}`);
+  if (els.length === 0) {
+    // find all es-col siblings in the same block
+    const block = document.querySelector(`[onclick="toggleEs('${groupId}')"]`).closest('.grammar-block');
+    const cols = block.querySelectorAll('.es-col');
+    const hidden = cols[0].classList.contains('hidden');
+    cols.forEach(el => el.classList.toggle('hidden', !hidden));
+  } else {
+    const hidden = els[0].classList.contains('hidden');
+    els.forEach(el => el.classList.toggle('hidden', !hidden));
+  }
+}
+
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+buildCards();
+
+// Fix toggleEs for groups
+document.querySelectorAll('.toggle-es-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const block = this.closest('.grammar-block');
+    const cols = block.querySelectorAll('.es-col');
+    const hidden = cols[0] && cols[0].classList.contains('hidden');
+    cols.forEach(el => el.classList.toggle('hidden', !hidden));
+  });
+  btn.removeAttribute('onclick');
+});
+</script>
+</body>
+</html>
